@@ -57,7 +57,10 @@ export default function Home() {
             <Menu />
             <Box sx={{width:'100%', display:'flex', justifyContent:'center'}}>
                 <Box sx={{width:{md:'70%', xs:'100%'}}}>
+                <Box sx={{display:'flex', justifyContent:'space-between', margin:'20px'}}>
                     <Typography fontSize="30px">Tus proyectos</Typography>
+                    <Button variant="contained" onClick={() => window.location.href = "/agregar"}>Agregar</Button>
+                </Box>
                     <Box sx={{display:'flex', flexDirection:'column', gap:'20px'}}>
                         {getProyectos.map((value, index) => {
                             return (
