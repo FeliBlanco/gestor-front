@@ -71,7 +71,7 @@ export default function Home() {
             setEdit(null)
         }
         catch(err) {
-
+            alert("ERROR")
         }
     }
     return (
@@ -115,15 +115,15 @@ export default function Home() {
             </Box>
             <Modal open={getEdit != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}} onClose={() => setEdit(null)}>
                 <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}}}>
-                    <TextField margin="normal" label="Nombre" size="small" fullWidth value={getEdit?.nombre}/>
-                    <Select size="small" fullWidth value={getEdit?.type}>
+                    <TextField margin="normal" label="Nombre" size="small" fullWidth value={getEdit?.nombre} onChange={(e) => setEdit(i => ({...i, nombre: e.target.value}))}/>
+                    <Select size="small" fullWidth value={getEdit?.type} onChange={(e) => setEdit(i => ({...i, type: e.target.value}))}>
                         <MenuItem value="front">Front</MenuItem>
                         <MenuItem value="back">Back</MenuItem>
                     </Select>
-                    <TextField margin="normal" label="Repositorio" size="small" fullWidth value={getEdit?.repositorio}/>
-                    <TextField margin="normal" label="Rama" size="small" fullWidth value={getEdit?.rama}/>
-                    <TextField margin="normal" label="Directorio build" size="small" fullWidth value={getEdit?.ruta_final}/>
-                    <TextField margin="normal" label="Nombre del directorio de build" size="small" fullWidth value={getEdit?.directorio_copiar}/>
+                    <TextField margin="normal" label="Repositorio" size="small" fullWidth value={getEdit?.repositorio} onChange={(e) => setEdit(i => ({...i, repositorio: e.target.value}))}/>
+                    <TextField margin="normal" label="Rama" size="small" fullWidth value={getEdit?.rama} onChange={(e) => setEdit(i => ({...i, rama: e.target.value}))}/>
+                    <TextField margin="normal" label="Directorio build" size="small" fullWidth value={getEdit?.ruta_final} onChange={(e) => setEdit(i => ({...i, ruta_final: e.target.value}))}/>
+                    <TextField margin="normal" label="Nombre del directorio de build" size="small" fullWidth value={getEdit?.directorio_copiar} onChange={(e) => setEdit(i => ({...i, directorio_copiar: e.target.value}))}/>
                     <Button sx={{margin:'5px 0'}} fullWidth variant="contained" onClick={() => saveBtn()}>Guardar</Button>
                     <Button sx={{margin:'5px 0'}} fullWidth variant="outlined" onClick={() => setEdit(null)}>Cancelar</Button>
                 </Paper>
