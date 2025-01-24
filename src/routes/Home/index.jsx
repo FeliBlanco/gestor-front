@@ -1,11 +1,13 @@
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, MenuItem, Modal, Paper, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Home() {
 
     const [getProyectos, setProyectos] = useState([]);
+    const [getEdit, setEdit] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -52,6 +54,26 @@ export default function Home() {
             })
         }
     }
+
+    const saveBtn = async () => {
+        if(getEdit == null) return;
+        try {
+            await axios.put(`${import.meta.env.VITE_APP_API_URL}/proyecto/${getEdit.id}`, {
+                ...getEdit
+            })
+            setProyectos(i => {
+                const findIn = i.findIndex(j => j.id == getEdit.id);
+                if(findIn != -1) {
+                    i[findIn] = getEdit;
+                }
+                return [...i]
+            })
+            setEdit(null)
+        }
+        catch(err) {
+
+        }
+    }
     return (
         <Box>
             <Menu />
@@ -65,12 +87,17 @@ export default function Home() {
                         {getProyectos.map((value, index) => {
                             return (
                                 <Card sx={{padding:'20px'}} key={`pro-${index}`}>
-                                    <Box sx={{display:'flex', gap:'10px'}}>
-                                        <Typography fontSize="20px">{value.nombre}</Typography>
-                                        <Box>
-                                            <Box sx={{background: value.type == "front" ? 'red' : 'green', color:'#fff', borderRadius:'10px', padding:'2px 4px', cursor:'pointer', userSelect:'none'}}>
-                                                <Typography sx={{textTransform:'uppercase'}} fontWeight={'bold'} fontSize="14px">{value.type}</Typography>
+                                    <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                                        <Box sx={{display:'flex', gap:'10px'}}>
+                                            <Typography fontSize="20px">{value.nombre}</Typography>
+                                            <Box>
+                                                <Box sx={{background: value.type == "front" ? 'red' : 'green', color:'#fff', borderRadius:'10px', padding:'2px 4px', cursor:'pointer', userSelect:'none'}}>
+                                                    <Typography sx={{textTransform:'uppercase'}} fontWeight={'bold'} fontSize="14px">{value.type}</Typography>
+                                                </Box>
                                             </Box>
+                                        </Box>
+                                        <Box>
+                                            <Button onClick={() => setEdit(value)}><EditIcon /></Button>
                                         </Box>
                                     </Box>
                                     <Typography fontSize="18px">Repositorio: {value.repositorio}</Typography>
@@ -86,6 +113,21 @@ export default function Home() {
                     </Box>
                 </Box>
             </Box>
+            <Modal open={getEdit != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}} onClose={() => setEdit(null)}>
+                <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}}}>
+                    <TextField margin="normal" label="Nombre" size="small" fullWidth value={getEdit?.nombre}/>
+                    <Select size="small" fullWidth value={getEdit?.type}>
+                        <MenuItem value="front">Front</MenuItem>
+                        <MenuItem value="back">Back</MenuItem>
+                    </Select>
+                    <TextField margin="normal" label="Repositorio" size="small" fullWidth value={getEdit?.repositorio}/>
+                    <TextField margin="normal" label="Rama" size="small" fullWidth value={getEdit?.rama}/>
+                    <TextField margin="normal" label="Directorio build" size="small" fullWidth value={getEdit?.ruta_final}/>
+                    <TextField margin="normal" label="Nombre del directorio de build" size="small" fullWidth value={getEdit?.directorio_copiar}/>
+                    <Button sx={{margin:'5px 0'}} fullWidth variant="contained" onClick={() => saveBtn()}>Guardar</Button>
+                    <Button sx={{margin:'5px 0'}} fullWidth variant="outlined" onClick={() => setEdit(null)}>Cancelar</Button>
+                </Paper>
+            </Modal>
         </Box>
     )
 }
