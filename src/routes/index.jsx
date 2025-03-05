@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import NuevoProyecto from "./NuevoProyecto";
 import Agregar from "./Agregar";
+import Proyecto from "./Proyecto";
 
 const routes = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ const routes = createBrowserRouter([
     {
         path: '/agregar',
         element: <Agregar />
+    },
+    {
+        path: '/project/:id',
+        element: <Proyecto />
     }
 ])
 

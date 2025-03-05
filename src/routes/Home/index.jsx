@@ -4,17 +4,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import EditIcon from '@mui/icons-material/Edit';
 
+import SearchIcon from '@mui/icons-material/Search';
+
 export default function Home() {
 
-    const [getProyectos, setProyectos] = useState([]);
+    const [getProyectos, setProyectos] = useState([
+        {
+            nombre: 'FAMM',
+            proyectos: '2 proyectos'
+        }
+    ]);
     const [getEdit, setEdit] = useState(null);
+    const [getBuscador, setBuscador] = useState('')
 
     useEffect(() => {
         (async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto`)
                 console.log(response.data)
-                setProyectos(response.data)
+                //setProyectos(response.data)
             }
             catch(err) {
                 console.log(err)
@@ -74,17 +82,27 @@ export default function Home() {
             alert("ERROR")
         }
     }
+
+    const buscadorProyectos = (value) => {
+        console.log(value)
+        if(getBuscador.length > 0) {
+            if(value.nombre.toLowerCase().indexOf(getBuscador.toLowerCase()) != -1) {
+                return value;
+            }
+        }
+        else return value
+    }
     return (
         <Box>
             <Menu />
             <Box sx={{width:'100%', display:'flex', justifyContent:'center'}}>
-                <Box sx={{width:{md:'70%', xs:'100%'}}}>
-                <Box sx={{display:'flex', justifyContent:'space-between', margin:'20px'}}>
-                    <Typography fontSize="30px">Tus proyectos</Typography>
-                    <Button variant="contained" onClick={() => window.location.href = "/agregar"}>Agregar</Button>
-                </Box>
+                <Box sx={{width:{md:'90%', xs:'100%'}}}>
                     <Box sx={{display:'flex', flexDirection:'column', gap:'20px'}}>
-                        {getProyectos.map((value, index) => {
+                        <Box sx={{display:'flex', justifyContent:'space-between', gap:'10px', margin:'20px 0'}}>
+                            <TextField onChange={e => setBuscador(e.target.value)} value={getBuscador} InputProps={{style:{background:'#fff'}, startAdornment: <SearchIcon style={{marginRight:'10px', color:'#949494'}}/>}} size="small" fullWidth placeholder="Buscar proyectos..."/>
+                            <Button variant="contained" sx={{textTransform:'capitalize', textWrap:'nowrap'}} onClick={() => window.location.href = "/agregar"}>Crear nuevo</Button>
+                        </Box>
+                        {getProyectos.filter(buscadorProyectos).map((value, index) => {
                             return (
                                 <Card sx={{padding:'20px'}} key={`pro-${index}`}>
                                     <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>

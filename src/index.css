@@ -3,3 +3,8 @@ body {
   margin:0;
   background:#f7f7f7;
 }
+
+* {
+  font-family: "Open Sans", serif;
+  font-style: normal;
+}

@@ -63,6 +63,25 @@ export default function NuevoProyecto() {
         ]
     })
 
+    const [getFrameworks, setFrameworks] = useState([
+        {
+            nombre: 'Vite JS',
+            type:'front'
+        },
+        {
+            nombre: 'React JS',
+            type:'front'
+        },
+        {
+            nombre:'Express',
+            type:'back'
+        },
+        {
+            nombre:'Django',
+            type:'back'
+        }
+    ])
+
     const addEnviromentVariable = () => {
         setData(i => {
             i.enviroment_variables.push({key:'', value:''})
@@ -105,9 +124,9 @@ export default function NuevoProyecto() {
                         <TextField value={getData.git_repo} onChange={(e) => setData(i => ({...i, git_repo: e.target.value}))} sx={{margin:'10px 0'}} fullWidth size="small" placeholder="Repositorio de GitHub"/>
                         <Select sx={{margin:'10px 0'}} size="small" fullWidth value={getData.framework} onChange={(e) => setData(i => ({...i, framework: e.target.value}))}>
                             <MenuItem value="-" disabled>Elegir Framework</MenuItem>
-                            <MenuItem value="react">React JS</MenuItem>
-                            <MenuItem value="vite">Vite JS</MenuItem>
-                            <MenuItem value="node">Node JS</MenuItem>
+                            {
+                                getFrameworks.map((value, index) => <MenuItem key={`dsd-${index}`} value={value.nombre}>{value.nombre}</MenuItem>)
+                            }
                         </Select>
                         <Box>
                             <Accordion disableGutters elevation={0} square>
