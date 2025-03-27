@@ -1,4 +1,4 @@
-import { Box, Button, Card, MenuItem, Modal, Paper, Select, TextField, Typography } from "@mui/material";
+import { Backdrop, Box, Button, Card, CircularProgress, MenuItem, Modal, Paper, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,21 +8,19 @@ import SearchIcon from '@mui/icons-material/Search';
 
 export default function Home() {
 
-    const [getProyectos, setProyectos] = useState([
-        {
-            nombre: 'FAMM',
-            proyectos: '2 proyectos'
-        }
-    ]);
+    const [getProyectos, setProyectos] = useState([]);
     const [getEdit, setEdit] = useState(null);
     const [getBuscador, setBuscador] = useState('')
+
+    const [getAddGrupoData, setAddGrupoData] = useState(null)
+    const [isCreatingProyecto, setCreatingProyecto] = useState(false)
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto`)
+                const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/grupo`)
                 console.log(response.data)
-                //setProyectos(response.data)
+                setProyectos(response.data)
             }
             catch(err) {
                 console.log(err)
@@ -92,6 +90,30 @@ export default function Home() {
         }
         else return value
     }
+
+    const abrirModalAddGrupo = () => {
+        setAddGrupoData({
+            nombre: ''
+        })
+    }
+
+    const crearProyecto = async () => {
+        try {
+            if(isCreatingProyecto) return;
+            setCreatingProyecto(true)
+            await axios.post(`${import.meta.env.VITE_APP_API_URL}/grupo`, {
+                ...getAddGrupoData
+            })
+            setAddGrupoData(null)
+            location.location.reload()
+        }
+        catch(err) {
+            alert("error")
+        }
+        finally {
+            setCreatingProyecto(false)
+        }
+    }
     return (
         <Box>
             <Menu />
@@ -100,37 +122,33 @@ export default function Home() {
                     <Box sx={{display:'flex', flexDirection:'column', gap:'20px'}}>
                         <Box sx={{display:'flex', justifyContent:'space-between', gap:'10px', margin:'20px 0'}}>
                             <TextField onChange={e => setBuscador(e.target.value)} value={getBuscador} InputProps={{style:{background:'#fff'}, startAdornment: <SearchIcon style={{marginRight:'10px', color:'#949494'}}/>}} size="small" fullWidth placeholder="Buscar proyectos..."/>
-                            <Button variant="contained" sx={{textTransform:'capitalize', textWrap:'nowrap'}} onClick={() => window.location.href = "/agregar"}>Crear nuevo</Button>
+                            <Button variant="contained" sx={{textTransform:'capitalize', textWrap:'nowrap'}} onClick={() => abrirModalAddGrupo()}>Crear nuevo</Button>
                         </Box>
-                        {getProyectos.filter(buscadorProyectos).map((value, index) => {
-                            return (
-                                <Card sx={{padding:'20px'}} key={`pro-${index}`}>
-                                    <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                        <Box sx={{display:'flex', gap:'10px'}}>
-                                            <Typography fontSize="20px">{value.nombre}</Typography>
-                                            <Box>
-                                                <Box sx={{background: value.type == "front" ? 'red' : 'green', color:'#fff', borderRadius:'10px', padding:'2px 4px', cursor:'pointer', userSelect:'none'}}>
-                                                    <Typography sx={{textTransform:'uppercase'}} fontWeight={'bold'} fontSize="14px">{value.type}</Typography>
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                        <Box>
-                                            <Button onClick={() => setEdit(value)}><EditIcon /></Button>
-                                        </Box>
-                                    </Box>
-                                    <Typography fontSize="18px">Repositorio: {value.repositorio}</Typography>
-                                    <Typography fontSize="18px">Rama: {value.rama}</Typography>
-                                    <Typography fontSize="18px">Directorio build: {value.ruta_final}</Typography>
-                                    <Typography fontSize="18px">Nombre directorio de build: {value.directorio_copiar}</Typography>
-                                    {
-                                        value.actualizando == 0 ? <Button variant="contained" onClick={() => actualizarSistema(value.id)}>Actualizar</Button> : <Typography>Actualizandose...</Typography>
-                                    }
-                                </Card>
-                            )
-                        })}
+                        <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}>
+                            {getProyectos.filter(buscadorProyectos).map((value, index) => {
+                                return (
+                                    <Card sx={{padding:'20px', cursor:'pointer'}} key={`pro-${index}`} onClick={() => window.location.href = "/"+value.usuario}>
+                                        <Typography fontSize="24px">{value.nombre}</Typography>                               
+                                        
+                                        <Typography>{value.usuario}</Typography>
+                                        <Typography>4 proyectos</Typography>
+                                        <Typography>Creado por: <a style={{color:'#949494'}}>Feli Blanco</a></Typography>
+                                    </Card>
+                                )
+                            })}
+                        </Box>
                     </Box>
                 </Box>
             </Box>
+            <Modal open={getAddGrupoData != null} sx={{display:'flex', alignItems:'center', justifyContent:'center'}} onClose={() => setAddGrupoData(null)}>
+                <Paper sx={{padding:'20px', width:{sx:'90%', md:'450px'}}}>
+                    <Typography textAlign={"center"} fontSize="20px">Crear proyecto</Typography>
+                    <Box sx={{margin:'10px 0'}}>
+                        <TextField value={getAddGrupoData?.nombre} onChange={e => setAddGrupoData(i => ({...i, nombre: e.target.value}))} fullWidth size="small" label="Nombre del proyecto"/>
+                    </Box>
+                    <Button fullWidth variant="contained" onClick={() => crearProyecto()}>Crear proyecto</Button>
+                </Paper>
+            </Modal>
             <Modal open={getEdit != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}} onClose={() => setEdit(null)}>
                 <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}}}>
                     <TextField margin="normal" label="Nombre" size="small" fullWidth value={getEdit?.nombre} onChange={(e) => setEdit(i => ({...i, nombre: e.target.value}))}/>
@@ -146,6 +164,9 @@ export default function Home() {
                     <Button sx={{margin:'5px 0'}} fullWidth variant="outlined" onClick={() => setEdit(null)}>Cancelar</Button>
                 </Paper>
             </Modal>
+            <Backdrop open={isCreatingProyecto}>
+                <CircularProgress />
+            </Backdrop>
         </Box>
     )
 }

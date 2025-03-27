@@ -3,23 +3,35 @@ import Home from "./Home";
 import NuevoProyecto from "./NuevoProyecto";
 import Agregar from "./Agregar";
 import Proyecto from "./Proyecto";
+import Grupo from "./Grupo";
+import SocketContextProvider from "../contexts/socket";
 
 const routes = createBrowserRouter([
     {
         path: '/',
-        element: <Home />
-    },
-    {
-        path: '/new-project',
-        element: <NuevoProyecto />
-    },
-    {
-        path: '/agregar',
-        element: <Agregar />
-    },
-    {
-        path: '/project/:id',
-        element: <Proyecto />
+        element: <SocketContextProvider />,
+        children: [
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: '/:grupo',
+                element: <Grupo />
+            },
+            {
+                path: '/:grupo/new-project',
+                element: <NuevoProyecto />
+            },
+            {
+                path: '/agregar',
+                element: <Agregar />
+            },
+            {
+                path: '/:grupo/:proyecto',
+                element: <Proyecto />
+            }
+        ]
     }
 ])
 
