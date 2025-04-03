@@ -5,10 +5,13 @@ import axios from "axios";
 import EditIcon from '@mui/icons-material/Edit';
 
 import SearchIcon from '@mui/icons-material/Search';
+import { useTheme } from "@emotion/react";
 
 export default function Home() {
+    const theme = useTheme()
 
     const [getProyectos, setProyectos] = useState([]);
+
     const [getEdit, setEdit] = useState(null);
     const [getBuscador, setBuscador] = useState('')
 
@@ -121,17 +124,16 @@ export default function Home() {
                 <Box sx={{width:{md:'90%', xs:'100%'}}}>
                     <Box sx={{display:'flex', flexDirection:'column', gap:'20px'}}>
                         <Box sx={{display:'flex', justifyContent:'space-between', gap:'10px', margin:'20px 0'}}>
-                            <TextField onChange={e => setBuscador(e.target.value)} value={getBuscador} InputProps={{style:{background:'#fff'}, startAdornment: <SearchIcon style={{marginRight:'10px', color:'#949494'}}/>}} size="small" fullWidth placeholder="Buscar proyectos..."/>
-                            <Button variant="contained" sx={{textTransform:'capitalize', textWrap:'nowrap'}} onClick={() => abrirModalAddGrupo()}>Crear nuevo</Button>
+                            <TextField onChange={e => setBuscador(e.target.value)} value={getBuscador} InputProps={{startAdornment: <SearchIcon style={{marginRight:'10px', color:'#949494'}}/>}} size="small" fullWidth placeholder="Buscar proyectos..."/>
+                            <Button variant="contained" sx={{textTransform:'capitalize', background: theme.palette.custom.button_inverse, textWrap:'nowrap'}} onClick={() => abrirModalAddGrupo()}>Crear nuevo</Button>
                         </Box>
-                        <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}>
+                        <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}> 
                             {getProyectos.filter(buscadorProyectos).map((value, index) => {
                                 return (
                                     <Card sx={{padding:'20px', cursor:'pointer'}} key={`pro-${index}`} onClick={() => window.location.href = "/"+value.usuario}>
-                                        <Typography fontSize="24px">{value.nombre}</Typography>                               
-                                        
-                                        <Typography>{value.usuario}</Typography>
-                                        <Typography>4 proyectos</Typography>
+                                        <Typography fontSize="16px" fontWeight={"bold"}>{value.nombre}</Typography>                               
+                                        <Typography sx={{color:'text.secondary'}} fontSize="14px">{value.usuario}</Typography>
+                                        <Typography>{value.cantidadproyectos} proyectos</Typography>
                                         <Typography>Creado por: <a style={{color:'#949494'}}>Feli Blanco</a></Typography>
                                     </Card>
                                 )

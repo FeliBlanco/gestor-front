@@ -9,15 +9,35 @@ import BuildComponent from "./components/BuildComponent";
 import DominiosComponent from "./components/DominiosComponent";
 import ConfigComponent from "./components/ConfigComponent";
 import LogsComponent from "./components/LogsComponent";
+import useSocket from "../../hooks/useSocket";
+import DatabaseComponent from "./components/DatabaseComponent";
 
 
 export default function Proyecto() {
 
     const { grupo, proyecto } = useParams()
+    const getSocket = useSocket()
 
     const [getData, setData] = useState(null)
     
     const [getIndexTab, setIndexTab] = useState(0)
+    const [getLoaded, setLoaded] = useState(false)
+
+
+    useEffect(() => {
+        if(getSocket && getData && getLoaded == false) {
+            getSocket.emit('join-project', getData.id)
+            setLoaded(true)
+        }
+        if(getSocket && getData) {
+            getSocket.on('change_status', (status) => {
+                setData(i => ({...i, status}))
+            })
+        }
+        return () => {
+            getSocket?.off('change_status')
+        }
+    }, [getSocket, getData])
 
 
     useEffect(() => {
@@ -53,15 +73,16 @@ export default function Proyecto() {
                 </Breadcrumbs>
                 <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                     <Box>
-                        <Typography fontSize="2rem" lineHeight={"2.5rem"} fontWeight={600} sx={{color:'#212121'}}>{getData?.nombre}</Typography>
+                        <Typography fontSize="2rem" lineHeight={"2.5rem"} fontWeight={600} >{getData?.nombre}</Typography>
                     </Box>
                 </Box>
                 <Box>
-                    <Tabs value={getIndexTab} onChange={handleChangeTabIndex} sx={{background:'#fff', borderRadius:'10px 10px 0 0'}}>
+                    <Tabs value={getIndexTab} onChange={handleChangeTabIndex} sx={{borderRadius:'10px 10px 0 0'}}>
                         <Tab label="Proyecto" />
                         <Tab label="Build" />
                         <Tab label="Dominios" />
-                        <Tab label="Logs" />
+                        <Tab label="Terminal" />
+                        <Tab label="Base de datos" />
                         <Tab label="Configuraciones" />
                     </Tabs>
                     <CustomTabPanel value={getIndexTab} index={0}>
@@ -77,6 +98,9 @@ export default function Proyecto() {
                         <LogsComponent proyecto_id={getData?.id}/>
                     </CustomTabPanel>
                     <CustomTabPanel value={getIndexTab} index={4}>
+                        <DatabaseComponent proyecto_id={getData?.id}/>
+                    </CustomTabPanel>
+                    <CustomTabPanel value={getIndexTab} index={5}>
                         <ConfigComponent proyecto_id={getData?.id}/>
                     </CustomTabPanel>
             

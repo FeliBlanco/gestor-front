@@ -1,6 +1,8 @@
-import { Alert, Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, IconButton, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function DominiosComponent({proyecto_id}) {
     const [getAddData, setAddData] = useState(null)
@@ -72,6 +74,9 @@ export default function DominiosComponent({proyecto_id}) {
                         getDominios.map((value, index) => {
                             return (
                                 <Paper key={`dsd-${index}`} sx={{padding:'20px'}}>
+                                    <Box sx={{display:'flex', justifyContent:'flex-end'}}>
+                                        <IconButton><EditIcon /></IconButton>
+                                    </Box>
                                     <TextField margin="normal" size="small" fullWidth value={value.dominio} multiline disabled/>
                                     <TextField size="small" fullWidth value={value.configuracion} multiline disabled/>
                                 </Paper>

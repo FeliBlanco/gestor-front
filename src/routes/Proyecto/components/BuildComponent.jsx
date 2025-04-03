@@ -36,18 +36,18 @@ export default function BuildComponent({data}) {
                 {
                     getBuilds.map((value, index) => {
                         return (
-                            <Box key={`lid-${index}`} sx={{display:'flex', justifyContent:'space-between'}}>
-                                <Box flex={1}>
+                            <Box key={`lid-${index}`} sx={{display:'flex', justifyContent:'space-between', margin:'14px 0'}}>
+                                <Box flex={1} display="flex" flexDirection={"row"} alignItems={"center"}>
                                     <Typography>{value.fecha}</Typography>
                                 </Box>
                                 <Box flex={1} display="flex" justifyContent={"center"}>
                                     <Box flex={1}>
-                                        <Typography sx={{display:'flex'}}><CommitIcon />{value.commit}</Typography>
-                                        <Typography sx={{display:'flex'}}><PolylineIcon />{value.rama}</Typography>
+                                        <Typography sx={{display:'flex', fontSize:'14px'}}><CommitIcon sx={{fontSize:'18px'}}/>{value.commit}</Typography>
+                                        <Typography sx={{display:'flex', fontSize:'14px'}}><PolylineIcon sx={{fontSize:'18px'}}/>{value.rama}</Typography>
                                     </Box>
-                                    <Box flex={1}>
+                                    <Box flex={1} display="flex" flexDirection={"column"} alignItems={"center"}>
                                         <Typography sx={{display:'flex', alignItems:'center', gap:'5px'}}><Box sx={{width:'12px', height:'12px', background:getColoresStatus(value.status), borderRadius:'100%'}}></Box>{getStatusName(value.status)}</Typography>
-                                        <Typography>{value.time || '0'}s</Typography>
+                                        <Typography sx={{fontSize:'14px'}}>{Math.floor(value.time / 1000) || '0'}s</Typography>
                                     </Box>
                                 </Box>
                                 <Box flex={1} display="flex" justifyContent={"flex-end"}>

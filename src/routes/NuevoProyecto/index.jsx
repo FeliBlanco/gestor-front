@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Button, Card, CircularProgress, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Backdrop, Box, Breadcrumbs, Button, Card, CircularProgress, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { styled } from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
@@ -63,6 +63,7 @@ export default function NuevoProyecto() {
     const { grupo } = useParams()
 
     const [getGrupoData, setGrupoData] = useState(null)
+    const [isCreating, setCreating] = useState(false)
 
     const [getData, setData] = useState({
         nombre: '',
@@ -154,6 +155,8 @@ export default function NuevoProyecto() {
     }
 
     const submitProyecto = async () => {
+        if(isCreating) return;
+        setCreating(true)
         try {
             const result = await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto`, {
                 ...getData,
@@ -163,6 +166,9 @@ export default function NuevoProyecto() {
         }
         catch(err) {
             alert("error al crear")
+        }
+        finally {
+            setCreating(false)
         }
     }
 
@@ -276,6 +282,9 @@ export default function NuevoProyecto() {
                     </Card>
                 </Box>
             </Box>
+            <Backdrop open={isCreating}>
+                <CircularProgress sx={{color:'#fff'}}/>
+            </Backdrop>
         </Box>
     )
 }
