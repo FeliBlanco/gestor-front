@@ -142,7 +142,15 @@ export default function NuevoProyecto() {
 
     const changeEnviromentVariableKey = (index, value) => {
         setData(i => {
-            i.enviroment_variables[index].key = value;
+            if(i.enviroment_variables[index].key.length == 0 && value.length > 3 && value.indexOf('=') != -1) {
+                const partes = value.split('=')
+                i.enviroment_variables[index].key = partes[0];
+                if(partes[1]) {
+                    i.enviroment_variables[index].value = partes[1];
+                }
+            } else {
+                i.enviroment_variables[index].key = value;
+            }
             return {...i}
         })
     }

@@ -81,7 +81,15 @@ export default function ConfigComponent({proyecto_id}) {
 
     const changeEnviromentVariableKey = (index, value) => {
         setConfig(i => {
-            i.env_vars[index].key = value;
+            if(i.env_vars[index].key.length == 0 && value.length > 3 && value.indexOf('=') != -1) {
+                const partes = value.split('=')
+                i.env_vars[index].key = partes[0];
+                if(partes[1]) {
+                    i.env_vars[index].value = partes[1];
+                }
+            } else {
+                i.env_vars[index].key = value;
+            }
             return {...i}
         })
     }
