@@ -140,6 +140,7 @@ export default function ConfigComponent({proyecto_id}) {
                         <TextField margin="normal" label="Build Command" fullWidth size="small" value={getConfig.build_command} onChange={(e) => setConfig(i => ({...i, build_command: e.target.value}))}/>
                         <TextField margin="normal" label="Output Directory" fullWidth size="small" value={getConfig.output_directory} onChange={(e) => setConfig(i => ({...i, output_directory: e.target.value}))}/>
                         <TextField margin="normal" label="Start Command" fullWidth size="small" value={getConfig.start_command} onChange={(e) => setConfig(i => ({...i, start_command: e.target.value}))}/>
+                        <TextField margin="normal" label="PORT" fullWidth size="small" value={getConfig.system_port} onChange={(e) => setConfig(i => ({...i, system_port: e.target.value}))}/>
                         <Typography>Framework</Typography>
                         <Select disabled onChange={(e) => setConfig(i => ({...i, framework: e.target.value}))} value={getConfig.framework_id} size="small" fullWidth>
                             {getFrameworks?.map((value, index) => <MenuItem value={value.id} key={`f-${index}`}>{value.nombre}</MenuItem>)}
