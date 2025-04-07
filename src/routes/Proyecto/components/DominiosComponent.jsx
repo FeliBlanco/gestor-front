@@ -1,4 +1,4 @@
-import { Alert, Box, Button, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { Alert, Backdrop, Box, Button, CircularProgress, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -8,6 +8,8 @@ export default function DominiosComponent({proyecto_id}) {
     const [getAddData, setAddData] = useState(null)
     const [getDominios, setDominios] = useState([])
     const [getAlert, setAlert] = useState(false)
+    const [getEditDominio, setEditDominio] = useState(null)
+    const [isLoading, setLoading] = useState(false)
 
 
     useEffect(() => {
@@ -45,6 +47,21 @@ export default function DominiosComponent({proyecto_id}) {
 
         }
     }
+
+    const guardarConfig = async () => {
+        setLoading(true)
+        try {
+            await axios.put(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominio/${getEditDominio.id}`, {
+                configuracion: getEditDominio.configuracion,
+            })
+        }
+        catch(err) {
+
+        }
+        finally {
+            setLoading(false)
+        }
+    }
     return (
         <div>
             <Box display="flex" justifyContent={"space-between"}>
@@ -69,13 +86,13 @@ export default function DominiosComponent({proyecto_id}) {
                     <Typography>No hay dominios para mostrar.</Typography>
                 </Box>
                 :
-                <Box display="grid" gridTemplateColumns={"repeat(3, 1fr)"} gap="20px">
+                <Box display="grid" sx={{gridTemplateColumns: {md: "repeat(3, 1fr)", xs: "repeat(2, 1fr)"}}} gap="20px">
                     {
                         getDominios.map((value, index) => {
                             return (
                                 <Paper key={`dsd-${index}`} sx={{padding:'20px'}}>
                                     <Box sx={{display:'flex', justifyContent:'flex-end'}}>
-                                        <IconButton><EditIcon /></IconButton>
+                                        <IconButton onClick={() => setEditDominio(value)}><EditIcon /></IconButton>
                                     </Box>
                                     <TextField margin="normal" size="small" fullWidth value={value.dominio} multiline disabled/>
                                     <TextField size="small" fullWidth value={value.configuracion} multiline disabled/>
@@ -85,6 +102,19 @@ export default function DominiosComponent({proyecto_id}) {
                     }
                 </Box>
             }
+            <Backdrop open={isLoading}>
+                <CircularProgress sx={{color:'#fff'}}/>
+            </Backdrop>
+            <Modal open={getEditDominio != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}}}>
+                    <Typography fontSize="18px" textAlign={"center"}>
+                        {getEditDominio?.dominio}
+                    </Typography>
+                    <TextField fullWidth value={getEditDominio?.configuracion} multiline/>
+                    <Button sx={{margin:'10px 0'}} fullWidth variant="contained" onClick={() => guardarConfig()}>Guardar</Button>
+                    <Button sx={{margin:'5px 0'}} fullWidth variant="outlined" onClick={() => setEditDominio(null)}>Cancelar</Button>
+                </Paper>
+            </Modal>
         </div>
     )
 }
