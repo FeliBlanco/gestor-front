@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import ThemeContextProvider from './contexts/theme';
 import useUserTheme from './hooks/useUserTheme';
+import UserContextProvider from './contexts/user';
 const lightTheme = createTheme({
     palette: {
       mode: 'light',
@@ -31,7 +32,7 @@ const lightTheme = createTheme({
       },
       background: {
         default: '#121212',
-        paper: '#121212',
+        paper: '#0a0909',
       },
       secondary: {
         main: '#f48fb1',
@@ -58,7 +59,9 @@ const AppEx = () => {
     return (
         <ThemeProvider theme={getTheme === 'light' ? lightTheme : darkTheme}>
             <CssBaseline />
-            <Routes />
+            <UserContextProvider>
+              <Routes />
+            </UserContextProvider>
         </ThemeProvider>
     )
 }

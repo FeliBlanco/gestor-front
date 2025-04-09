@@ -4,17 +4,18 @@ import Menu from "../../components/Menu";
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 import PolylineIcon from '@mui/icons-material/Polyline';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import EmptyList from "../../components/EmptyList";
 import { useTheme } from "@emotion/react";
 import getStatusColorDocker from "../../utils/getStatusColorDocker";
+import useFetch from "../../hooks/useFetch";
 
 export default function Grupo() {
 
     const { grupo } = useParams()
+    const { getFetch, deleteFetch } = useFetch()
 
     const theme = useTheme()
 
@@ -24,8 +25,7 @@ export default function Grupo() {
     useEffect(() => {
         (async() => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto/${grupo}`)
-                console.log(result.data)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${grupo}`)
                 setProyectos(result.data)
             }
             catch(err) {
@@ -43,6 +43,17 @@ export default function Grupo() {
         else return value
     }
 
+    const eliminarGrupo = async () => {
+        try {
+            await deleteFetch(`${import.meta.env.VITE_APP_API_URL}/grupo/${grupo}`)
+            window.location.href = "/"
+        }
+        catch(err) {
+            console.log(err)
+            alert("error")
+        }
+    }
+
     return (
         <Box>
             <Menu/>
@@ -56,7 +67,10 @@ export default function Grupo() {
                     </Box>
                     {
                         getProyectos.length == 0 ?
+                        <Box>
+                            <Button onClick={() => eliminarGrupo()}>Eliminar proyecto</Button>
                             <EmptyList message="No hay proyectos para mostrar" />
+                        </Box>
                             :
                             <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}>
                                     {getProyectos.filter(buscadorProyectos).map((value, index) => {

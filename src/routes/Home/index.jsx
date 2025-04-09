@@ -1,14 +1,15 @@
 import { Backdrop, Box, Button, Card, CircularProgress, MenuItem, Modal, Paper, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import EditIcon from '@mui/icons-material/Edit';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from "@emotion/react";
+import useFetch from "../../hooks/useFetch";
 
 export default function Home() {
     const theme = useTheme()
+    const { getFetch, putFetch, postFetch } = useFetch()
 
     const [getProyectos, setProyectos] = useState([]);
 
@@ -21,8 +22,7 @@ export default function Home() {
     useEffect(() => {
         (async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/grupo`)
-                console.log(response.data)
+                const response = await getFetch(`${import.meta.env.VITE_APP_API_URL}/grupo`)
                 setProyectos(response.data)
             }
             catch(err) {
@@ -40,7 +40,7 @@ export default function Home() {
                 }
                 return [...i]
             })
-            const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/actualizar?sistema=${id}`, {
+            const response = await getFetch(`${import.meta.env.VITE_APP_API_URL}/actualizar?sistema=${id}`, {
                 timeout: 1000 * 60 * 2
             })
             setProyectos(i => {
@@ -67,7 +67,7 @@ export default function Home() {
     const saveBtn = async () => {
         if(getEdit == null) return;
         try {
-            await axios.put(`${import.meta.env.VITE_APP_API_URL}/proyecto/${getEdit.id}`, {
+            await putFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${getEdit.id}`, {
                 ...getEdit
             })
             setProyectos(i => {
@@ -85,7 +85,6 @@ export default function Home() {
     }
 
     const buscadorProyectos = (value) => {
-        console.log(value)
         if(getBuscador.length > 0) {
             if(value.nombre.toLowerCase().indexOf(getBuscador.toLowerCase()) != -1) {
                 return value;
@@ -104,7 +103,7 @@ export default function Home() {
         try {
             if(isCreatingProyecto) return;
             setCreatingProyecto(true)
-            await axios.post(`${import.meta.env.VITE_APP_API_URL}/grupo`, {
+            await postFetch(`${import.meta.env.VITE_APP_API_URL}/grupo`, {
                 ...getAddGrupoData
             })
             setAddGrupoData(null)

@@ -10,8 +10,8 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import useFetch from "../../hooks/useFetch";
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -61,6 +61,7 @@ const frameworks = {
 export default function NuevoProyecto() {
 
     const { grupo } = useParams()
+    const { getFetch, postFetch } = useFetch()
 
     const [getGrupoData, setGrupoData] = useState(null)
     const [isCreating, setCreating] = useState(false)
@@ -106,7 +107,7 @@ export default function NuevoProyecto() {
     useEffect(() => {
         (async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/grupo/${grupo}`)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/grupo/${grupo}`)
                 setGrupoData(result.data)
             }
             catch(err) {
@@ -117,7 +118,7 @@ export default function NuevoProyecto() {
         })();
         (async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/framework`)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/framework`)
                 setFrameworks(result.data)
             }
             catch(err) {
@@ -166,7 +167,7 @@ export default function NuevoProyecto() {
         if(isCreating) return;
         setCreating(true)
         try {
-            const result = await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto`, {
+            const result = await postFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto`, {
                 ...getData,
                 grupo: getGrupoData.id
             })

@@ -9,6 +9,7 @@ export default function SocketContextProvider() {
     const [getSocket, setSocket] = useState(null)
 
     useEffect(() => {
+        console.log("AAH")
         const socket = io(import.meta.env.VITE_APP_API_URL);
         setSocket(socket)
     }, [])

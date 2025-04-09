@@ -1,12 +1,13 @@
 import { Backdrop, Box, Button, CircularProgress, Divider, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import useFetch from "../../../hooks/useFetch";
 
 
 export default function ConfigComponent({proyecto_id}) {
+    const { getFetch, deleteFetch, putFetch } = useFetch()
     const [getConfig, setConfig] = useState(null)
     const [getData, setData] = useState(null)
     const [getFrameworks, setFrameworks] = useState(null)
@@ -16,14 +17,14 @@ export default function ConfigComponent({proyecto_id}) {
     useEffect(() => {
         (async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/framework/`)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/framework/`)
                 setFrameworks(result.data)
             }
             catch(err) {}
         })();
         (async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto/config/${proyecto_id}`)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/config/${proyecto_id}`)
                 console.log(result.data)
                 setData(result.data)
             }
@@ -59,9 +60,21 @@ export default function ConfigComponent({proyecto_id}) {
         }
     }, [getConfig?.framework])
     
-    const eliminarProyecto = () => {
+    const eliminarProyecto = async () => {
+        if(isLoading) return;
         if(confirm("¿Estás seguro que quieres eliminar el proyecto?")) {
-
+            setLoading(true)
+            try {
+                await deleteFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${proyecto_id}`)
+                alert("Eliminado!")
+                window.location.href = "/"
+            }
+            catch(err) {
+                console.log(err)
+            }
+            finally {
+                setLoading(false)
+            }
         }
     }
 
@@ -108,7 +121,8 @@ export default function ConfigComponent({proyecto_id}) {
     const saveData = async () => {
         setLoading(true)
         try {
-            await axios.put(`${import.meta.env.VITE_APP_API_URL}/proyecto/${proyecto_id}`, {
+            console.log(proyecto_id)
+            await putFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${proyecto_id}`, {
                 ...getConfig
             })
             setData(i => ({...getConfig}))
@@ -145,6 +159,7 @@ export default function ConfigComponent({proyecto_id}) {
                         <Select disabled onChange={(e) => setConfig(i => ({...i, framework: e.target.value}))} value={getConfig.framework_id} size="small" fullWidth>
                             {getFrameworks?.map((value, index) => <MenuItem value={value.id} key={`f-${index}`}>{value.nombre}</MenuItem>)}
                         </Select>
+                        <TextField margin="normal" label="Docker System" fullWidth size="small" value={getConfig.sistema_docker} onChange={(e) => setConfig(i => ({...i, sistema_docker: e.target.value}))}/>
                         <Divider sx={{margin:'10px 0'}}/>
                         <Typography fontWeight={"bold"} textTransform={"uppercase"} color="text.secondary">Variables de entorno</Typography>
                         <Box>

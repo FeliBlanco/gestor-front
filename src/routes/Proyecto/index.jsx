@@ -2,7 +2,6 @@ import { Box, Breadcrumbs, Button, Link, Tab, Tabs, Typography } from "@mui/mate
 import Menu from "../../components/Menu";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 import ProjectData from "./components/ProjectData";
 import BuildComponent from "./components/BuildComponent";
@@ -11,11 +10,13 @@ import ConfigComponent from "./components/ConfigComponent";
 import LogsComponent from "./components/LogsComponent";
 import useSocket from "../../hooks/useSocket";
 import DatabaseComponent from "./components/DatabaseComponent";
+import useFetch from "../../hooks/useFetch";
 
 
 export default function Proyecto() {
 
     const { grupo, proyecto } = useParams()
+    const { getFetch } = useFetch()
     const getSocket = useSocket()
 
     const [getData, setData] = useState(null)
@@ -44,7 +45,7 @@ export default function Proyecto() {
         (async() => {
             if(proyecto && grupo) {
                 try {
-                    const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto/${grupo}/${proyecto}`, {
+                    const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${grupo}/${proyecto}`, {
                         timeout: 60000
                     })
                     console.log(result.data)

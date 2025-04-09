@@ -6,7 +6,6 @@ import CommitIcon from '@mui/icons-material/Commit';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useEffect, useRef, useState } from "react";
 import useSocket from "../../../hooks/useSocket";
-import axios from "axios";
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -16,12 +15,14 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import getBackgroundColorStatus from "../../../utils/getBackgroundColorStatus";
 import getColorStatus from "../../../utils/getColorStatus";
 import getStatusColorDocker from "../../../utils/getStatusColorDocker";
+import useFetch from "../../../hooks/useFetch";
 
 
 export default function ProjectData({proyecto, grupo, data, onChangeData}) {
 
     const getSocket = useSocket()
     const scrollBuildLogRef = useRef()
+    const { getFetch, postFetch } = useFetch()
 
     const [getBuildLog, setBuildLog] = useState([])
     const [getActionButtonStatus, setActionButtonStatus] = useState(null)
@@ -58,7 +59,7 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
 
     const generarBuild = async () => {
         try {
-            await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto/build/${data.id}`)
+            await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/build/${data.id}`)
         }
         catch(err) {
             //alert("Error al buildear")
@@ -69,7 +70,7 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
         if(getActionButtonStatus != null) return;
         setActionButtonStatus("Prendiendo...")
         try {
-            await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto/start/${data.id}`)
+            await postFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/start/${data.id}`)
         }
         catch(err) {
 
@@ -83,7 +84,7 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
         if(getActionButtonStatus != null) return;
         setActionButtonStatus("Apagando...")
         try {
-            await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto/stop/${data.id}`)
+            await postFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/stop/${data.id}`)
         }
         catch(err) {
 

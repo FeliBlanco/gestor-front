@@ -1,10 +1,12 @@
 import { Backdrop, Box, Breadcrumbs, Button, Card, CircularProgress, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { useState } from "react";
-import axios from "axios";
+import useFetch from "../../hooks/useFetch";
 
 
 export default function Agregar() {
+
+    const { postFetch } = useFetch()
 
     const [isCreando, setCreando] = useState(false)
     const [getData, setData] = useState({
@@ -20,7 +22,7 @@ export default function Agregar() {
     const crearProyecto = async () => {
         try {
             setCreando(true)
-            await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto`, {
+            await postFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto`, {
                 nombre: getData.nombre,
                 repositorio: getData.git_repo,
                 rama: getData.rama,

@@ -1,8 +1,8 @@
 import { Box, Card, Typography } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import PolylineIcon from '@mui/icons-material/Polyline';
 import CommitIcon from '@mui/icons-material/Commit';
+import useFetch from "../../../hooks/useFetch";
 
 
 const getColoresStatus = (status) => {
@@ -18,12 +18,13 @@ const getStatusName = status => {
 }
 export default function BuildComponent({data}) {
 
+    const { getFetch } = useFetch()
     const [getBuilds, setBuilds] = useState([])
 
     useEffect(() => {
         (async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_APP_API_URL}/build/${data.id}`)
+                const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/build/${data.id}`)
                 console.log(result.data)
                 setBuilds(result.data)
             }

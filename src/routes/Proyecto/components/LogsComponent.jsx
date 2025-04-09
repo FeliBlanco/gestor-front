@@ -1,7 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import useSocket from "../../../hooks/useSocket";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 
 export default function LogsComponent({proyecto_id}) {
     const getSocket = useSocket()

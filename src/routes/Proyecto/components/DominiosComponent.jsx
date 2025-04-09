@@ -1,10 +1,12 @@
 import { Alert, Backdrop, Box, Button, CircularProgress, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import EditIcon from '@mui/icons-material/Edit';
+import useFetch from "../../../hooks/useFetch";
 
 export default function DominiosComponent({proyecto_id}) {
+
+    const { getFetch, putFetch, postFetch } = useFetch()
     const [getAddData, setAddData] = useState(null)
     const [getDominios, setDominios] = useState([])
     const [getAlert, setAlert] = useState(false)
@@ -15,7 +17,7 @@ export default function DominiosComponent({proyecto_id}) {
     useEffect(() => {
         (async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominios/${proyecto_id}`)
+                const response = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominios/${proyecto_id}`)
                 setDominios(response.data)
                 console.log(response.data)
             }
@@ -36,7 +38,7 @@ export default function DominiosComponent({proyecto_id}) {
     const submitAgDominio = async () => {
         if(getAddData.dominio.length < 2) return alert("Agrega un dominio")
         try {
-            await axios.post(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominio`, {
+            await postFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominio`, {
                 ...getAddData,
                 proyecto_id
             })
@@ -51,9 +53,11 @@ export default function DominiosComponent({proyecto_id}) {
     const guardarConfig = async () => {
         setLoading(true)
         try {
-            await axios.put(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominio/${getEditDominio.id}`, {
+            await putFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominios/${getEditDominio.id}`, {
                 configuracion: getEditDominio.configuracion,
             })
+            setLoading(false)
+            setEditDominio(null)
         }
         catch(err) {
 
@@ -105,12 +109,12 @@ export default function DominiosComponent({proyecto_id}) {
             <Backdrop open={isLoading}>
                 <CircularProgress sx={{color:'#fff'}}/>
             </Backdrop>
-            <Modal open={getEditDominio != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}}}>
+            <Modal onClose={() => setEditDominio(null)} open={getEditDominio != null} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <Paper sx={{padding:'20px', width:{xs:'90%', md:'450px'}, maxHeight:'460px', overflowY:'auto'}}>
                     <Typography fontSize="18px" textAlign={"center"}>
                         {getEditDominio?.dominio}
                     </Typography>
-                    <TextField fullWidth value={getEditDominio?.configuracion} multiline/>
+                    <TextField onChange={(e) => setEditDominio(i => ({...i, configuracion: e.target.value}))} fullWidth value={getEditDominio?.configuracion} multiline/>
                     <Button sx={{margin:'10px 0'}} fullWidth variant="contained" onClick={() => guardarConfig()}>Guardar</Button>
                     <Button sx={{margin:'5px 0'}} fullWidth variant="outlined" onClick={() => setEditDominio(null)}>Cancelar</Button>
                 </Paper>
