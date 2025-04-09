@@ -133,7 +133,6 @@ export default function Home() {
                                         <Typography fontSize="16px" fontWeight={"bold"}>{value.nombre}</Typography>                               
                                         <Typography sx={{color:'text.secondary'}} fontSize="14px">{value.usuario}</Typography>
                                         <Typography>{value.cantidadproyectos} proyectos</Typography>
-                                        <Typography>Creado por: <a style={{color:'#949494'}}>Feli Blanco</a></Typography>
                                     </Card>
                                 )
                             })}
