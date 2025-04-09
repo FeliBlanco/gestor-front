@@ -132,7 +132,7 @@ export default function Home() {
                                     <Card sx={{padding:'20px', cursor:'pointer'}} key={`pro-${index}`} onClick={() => window.location.href = "/"+value.usuario}>
                                         <Typography fontSize="16px" fontWeight={"bold"}>{value.nombre}</Typography>                               
                                         <Typography sx={{color:'text.secondary'}} fontSize="14px">{value.usuario}</Typography>
-                                        <Typography>{value.cantidadproyectos} proyectos</Typography>
+                                        <Typography>{value.cantidad_proyectos || 0} proyectos</Typography>
                                     </Card>
                                 )
                             })}
