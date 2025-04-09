@@ -9,6 +9,7 @@ import Login from "./Login";
 import RouteLogged from "../utils/RouteLogged";
 import useUser from "../hooks/useUser";
 import RouteUnlogged from "../utils/RouteUnlogged";
+import CambiarContra from "../components/CambiarContra";
 
 const routes = createBrowserRouter([
     {
@@ -57,8 +58,12 @@ const routes = createBrowserRouter([
 
 export default function Routes() {
 
-    const { isLogged } = useUser()
+    const { isLogged, getUserData } = useUser()
     if(isLogged == null) return <div></div>
+
+    if(getUserData.cambio_contra == 0) {
+        return <CambiarContra />
+    }
     return (
         <RouterProvider router={routes}></RouterProvider>
     )
