@@ -61,7 +61,7 @@ export default function Routes() {
     const { isLogged, getUserData } = useUser()
     if(isLogged == null) return <div></div>
 
-    if(getUserData.cambio_contra == 0) {
+    if(isLogged == true && getUserData?.cambio_contra == 0) {
         return <CambiarContra />
     }
     return (
