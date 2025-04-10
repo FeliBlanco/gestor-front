@@ -78,8 +78,8 @@ export default function Proyecto() {
                         <Typography fontSize="2rem" lineHeight={"2.5rem"} fontWeight={600} >{getData?.nombre}</Typography>
                     </Box>
                 </Box>
-                <Box>
-                    <Tabs value={getIndexTab} onChange={handleChangeTabIndex} sx={{borderRadius:'10px 10px 0 0'}}>
+                <Box sx={{ overflowX: 'auto', width: '100%' }}>
+                    <Tabs value={getIndexTab} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile onChange={handleChangeTabIndex} sx={{borderRadius:'10px 10px 0 0'}}>
                         <Tab label="Proyecto" />
                         <Tab label="Build" />
                         <Tab label="Dominios" />
