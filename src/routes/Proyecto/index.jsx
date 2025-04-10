@@ -11,6 +11,7 @@ import LogsComponent from "./components/LogsComponent";
 import useSocket from "../../hooks/useSocket";
 import DatabaseComponent from "./components/DatabaseComponent";
 import useFetch from "../../hooks/useFetch";
+import MiembrosComponent from "./components/MiembrosComponent";
 
 
 export default function Proyecto() {
@@ -85,6 +86,7 @@ export default function Proyecto() {
                         <Tab label="Terminal" />
                         <Tab label="Base de datos" />
                         <Tab label="Configuraciones" />
+                        <Tab label="Miembros" />
                     </Tabs>
                     <CustomTabPanel value={getIndexTab} index={0}>
                         <ProjectData data={getData} grupo={grupo} proyecto={proyecto} onChangeData={setData}/>
@@ -103,6 +105,9 @@ export default function Proyecto() {
                     </CustomTabPanel>
                     <CustomTabPanel value={getIndexTab} index={5}>
                         <ConfigComponent proyecto_id={getData?.id}/>
+                    </CustomTabPanel>
+                    <CustomTabPanel value={getIndexTab} index={6}>
+                        <MiembrosComponent proyecto_id={getData?.id}/>
                     </CustomTabPanel>
             
                 </Box>

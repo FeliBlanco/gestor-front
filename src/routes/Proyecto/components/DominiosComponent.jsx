@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 
 import EditIcon from '@mui/icons-material/Edit';
 import useFetch from "../../../hooks/useFetch";
+import useUser from "../../../hooks/useUser";
 
 export default function DominiosComponent({proyecto_id}) {
+
+    const { getUserData } = useUser()
 
     const { getFetch, putFetch, postFetch } = useFetch()
     const [getAddData, setAddData] = useState(null)
@@ -19,7 +22,6 @@ export default function DominiosComponent({proyecto_id}) {
             try {
                 const response = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/dominios/${proyecto_id}`)
                 setDominios(response.data)
-                console.log(response.data)
             }
             catch(err) {
 
@@ -78,7 +80,7 @@ export default function DominiosComponent({proyecto_id}) {
                     <Typography fontSize="20px">Agregar nuevo dominio</Typography>
                     <TextField value={getAddData.dominio} onChange={(e) => setAddData(i => ({...i, dominio: e.target.value}))} margin="normal" fullWidth size="small" placeholder="Dominio, ej: telemed.boolean.com.ar"/>
                     <TextField value={getAddData.configuraciones} onChange={(e) => setAddData(i => ({...i, configuraciones:e.target.value}))} margin="normal" fullWidth size="small" placeholder="Configuración" multiline rows={10}/>
-                    <Button onClick={() => submitAgDominio()} fullWidth variant="contained">Agregar dominio</Button>
+                    {getUserData.admin == 1 && <Button onClick={() => submitAgDominio()} fullWidth variant="contained">Agregar dominio</Button>}
                 </Paper>
             }
             {getAlert == true && <Alert severity="success" sx={{margin:'20px 0'}}>
@@ -95,9 +97,12 @@ export default function DominiosComponent({proyecto_id}) {
                         getDominios.map((value, index) => {
                             return (
                                 <Paper key={`dsd-${index}`} sx={{padding:'20px'}}>
-                                    <Box sx={{display:'flex', justifyContent:'flex-end'}}>
-                                        <IconButton onClick={() => setEditDominio(value)}><EditIcon /></IconButton>
-                                    </Box>
+                                    {
+                                        getUserData.admin == 1 &&
+                                        <Box sx={{display:'flex', justifyContent:'flex-end'}}>
+                                            <IconButton onClick={() => setEditDominio(value)}><EditIcon /></IconButton>
+                                        </Box>
+                                    }
                                     <TextField margin="normal" size="small" fullWidth value={value.dominio} multiline disabled/>
                                     <TextField size="small" fullWidth value={value.configuracion} multiline disabled/>
                                 </Paper>

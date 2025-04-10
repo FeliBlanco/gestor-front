@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import useFetch from "../../../hooks/useFetch";
+import useUser from "../../../hooks/useUser";
 
 
 export default function ConfigComponent({proyecto_id}) {
+    const { getUserData } = useUser()
     const { getFetch, deleteFetch, putFetch } = useFetch()
     const [getConfig, setConfig] = useState(null)
     const [getData, setData] = useState(null)
@@ -150,6 +152,7 @@ export default function ConfigComponent({proyecto_id}) {
                             <TextField sx={{flex:1}} margin="normal" label="Repositorio" size="small" value={getConfig.repositorio} disabled/>
                             <TextField size="small" margin="normal" label="Rama" value={getConfig.rama} onChange={(e) => setConfig(i => ({...i, rama: e.target.value}))}/>
                         </Box>
+                        <TextField margin="normal" label="Commit" fullWidth size="small" value={getConfig.build_commit} onChange={(e) => setConfig(i => ({...i, build_commit: e.target.value}))}/>
                         <TextField margin="normal" label="Install Command" fullWidth size="small" value={getConfig.install_command} onChange={(e) => setConfig(i => ({...i, install_command: e.target.value}))}/>
                         <TextField margin="normal" label="Build Command" fullWidth size="small" value={getConfig.build_command} onChange={(e) => setConfig(i => ({...i, build_command: e.target.value}))}/>
                         <TextField margin="normal" label="Output Directory" fullWidth size="small" value={getConfig.output_directory} onChange={(e) => setConfig(i => ({...i, output_directory: e.target.value}))}/>
@@ -196,19 +199,22 @@ export default function ConfigComponent({proyecto_id}) {
                             <Button variant="contained" disabled={!isEnableButton} onClick={() => saveData()}>Guardar</Button>
                         </Box>
                     </Paper>
-                    <Paper sx={{ padding: "24px", margin: "20px 0", textAlign: "center" }}>
-                        <Stack spacing={2} alignItems="center">
-                            <Typography component="h1" variant="h5" fontWeight="bold">
-                            ¿Eliminar {getConfig.nombre || "proyecto_name"}?
-                            </Typography>
-                            <Typography color="error">
-                            Una vez que elimines el proyecto, no puedes recuperarlo. Toda la información de la instancia se perderá.
-                            </Typography>
-                            <Button variant="contained" color="error" onClick={() => eliminarProyecto()}>
-                            Eliminar proyecto
-                            </Button>
-                        </Stack>
-                    </Paper>
+                    {
+                        getUserData.admin == 1 &&
+                        <Paper sx={{ padding: "24px", margin: "20px 0", textAlign: "center" }}>
+                            <Stack spacing={2} alignItems="center">
+                                <Typography component="h1" variant="h5" fontWeight="bold">
+                                ¿Eliminar {getConfig.nombre || "proyecto_name"}?
+                                </Typography>
+                                <Typography color="error">
+                                Una vez que elimines el proyecto, no puedes recuperarlo. Toda la información de la instancia se perderá.
+                                </Typography>
+                                <Button variant="contained" color="error" onClick={() => eliminarProyecto()}>
+                                Eliminar proyecto
+                                </Button>
+                            </Stack>
+                        </Paper>
+                    }
                 </>
             }
             <Backdrop open={isLoading}>
