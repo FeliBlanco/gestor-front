@@ -72,7 +72,7 @@ export default function Grupo() {
                             <EmptyList message="No hay proyectos para mostrar" />
                         </Box>
                             :
-                            <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}>
+                            <Box sx={{display:'grid', gridTemplateColumns:{md: 'repeat(3, 1fr)', xs:'repeat(1, 1fr)'}, gap:'20px'}}>
                                     {getProyectos.filter(buscadorProyectos).map((value, index) => {
                                         return (
                                             <Card sx={{padding:'20px', cursor:'pointer'}} key={`pro-${index}`} onClick={() => window.location.href = `/${grupo}/${value.usuario}`}>

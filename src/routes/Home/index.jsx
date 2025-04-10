@@ -126,7 +126,7 @@ export default function Home() {
                             <TextField onChange={e => setBuscador(e.target.value)} value={getBuscador} InputProps={{startAdornment: <SearchIcon style={{marginRight:'10px', color:'#949494'}}/>}} size="small" fullWidth placeholder="Buscar proyectos..."/>
                             <Button variant="contained" sx={{textTransform:'capitalize', background: theme.palette.custom.button_inverse, textWrap:'nowrap'}} onClick={() => abrirModalAddGrupo()}>Crear nuevo</Button>
                         </Box>
-                        <Box sx={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px'}}> 
+                        <Box sx={{display:'grid', gridTemplateColumns:{md:'repeat(3, 1fr)', xs:'repeat(2, 1fr)'}, gap:'20px'}}> 
                             {getProyectos.filter(buscadorProyectos).map((value, index) => {
                                 return (
                                     <Card sx={{padding:'20px', cursor:'pointer'}} key={`pro-${index}`} onClick={() => window.location.href = "/"+value.usuario}>
