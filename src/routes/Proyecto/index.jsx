@@ -49,7 +49,6 @@ export default function Proyecto() {
                     const result = await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${grupo}/${proyecto}`, {
                         timeout: 60000
                     })
-                    console.log(result.data)
                     setData(result.data)
                 }
                 catch(err) {
@@ -101,7 +100,7 @@ export default function Proyecto() {
                         <LogsComponent proyecto_id={getData?.id}/>
                     </CustomTabPanel>
                     <CustomTabPanel value={getIndexTab} index={4}>
-                        <DatabaseComponent proyecto_id={getData?.id}/>
+                        <DatabaseComponent proyecto_id={getData?.id} proyecto_usuario={getData?.usuario}/>
                     </CustomTabPanel>
                     <CustomTabPanel value={getIndexTab} index={5}>
                         <ConfigComponent proyecto_id={getData?.id}/>

@@ -62,7 +62,9 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
             await getFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/build/${data.id}`)
         }
         catch(err) {
-            //alert("Error al buildear")
+            if(err.response?.data) {
+                alert(err.response?.data)
+            }
         }
     }
 
