@@ -10,6 +10,7 @@ import RouteLogged from "../utils/RouteLogged";
 import useUser from "../hooks/useUser";
 import RouteUnlogged from "../utils/RouteUnlogged";
 import CambiarContra from "../components/CambiarContra";
+import Webhooks from "./Webhooks";
 
 const routes = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ const routes = createBrowserRouter([
                     {
                         path: '/:grupo/:proyecto',
                         element: <Proyecto />
+                    },
+                    {
+                        path: '/webhook',
+                        element: <Webhooks />
                     }
                 ]
             }
