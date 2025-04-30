@@ -135,7 +135,18 @@ export default function ConfigComponent({proyecto_id}) {
             await putFetch(`${import.meta.env.VITE_APP_API_URL}/proyecto/${proyecto_id}`, {
                 ...getConfig
             })
-            setData(i => ({...getConfig}))
+            const nueva_data = {
+                ...getConfig,
+                env_vars: getConfig.env_vars.map(i => {
+                    return {
+                        key: i.key,
+                        value: i.value,
+                        oculto: i.oculto,
+                        puede_cambiar: false
+                    }
+                })
+            }
+            setData(i => ({...nueva_data}))
         }
         catch(err) {
             alert("Error al guardar")
