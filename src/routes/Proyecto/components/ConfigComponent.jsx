@@ -1,11 +1,11 @@
 import { Backdrop, Box, Button, Checkbox, CircularProgress, Divider, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import useFetch from "../../../hooks/useFetch";
 import useUser from "../../../hooks/useUser";
-
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 export default function ConfigComponent({proyecto_id}) {
     const { getUserData } = useUser()
@@ -15,6 +15,8 @@ export default function ConfigComponent({proyecto_id}) {
     const [getFrameworks, setFrameworks] = useState(null)
     const [isLoading, setLoading] = useState(false)
     
+
+    const refInputEnv = useRef()
     
     useEffect(() => {
         (async () => {
@@ -136,6 +138,34 @@ export default function ConfigComponent({proyecto_id}) {
             setLoading(false)
         }
     }
+
+    const changeLoadEnv = e => {
+        const file = e.target.files[0];
+        if(file && file.name.endsWith(".env")) {
+            const reader = new FileReader()
+            reader.onload = function (result) {
+                const content = result.target.result;
+                const lines = content.split(/\r?\n/);
+                const envArray = [];
+                lines.forEach(line => {
+                    if(line.trim() && !line.startsWith("#")) {
+                        const [key, value] = line.split("=");
+                        envArray.push({ key: key.trim(), value: value ? value.trim() : "", oculto: false });
+                    }
+                });
+                if(envArray.length > 0) {
+                    setData(i => {
+                        i.enviroment_variables.push(...envArray)
+                        return {...i}
+                    })
+                }
+            };
+
+            reader.readAsText(file);
+        } else {
+            e.target.value = "";
+        }
+    }
     return (
         <Box>
             {
@@ -165,6 +195,8 @@ export default function ConfigComponent({proyecto_id}) {
                         <TextField margin="normal" label="Docker System" fullWidth size="small" value={getConfig.sistema_docker} onChange={(e) => setConfig(i => ({...i, sistema_docker: e.target.value}))}/>
                         <Divider sx={{margin:'10px 0'}}/>
                         <Typography fontWeight={"bold"} textTransform={"uppercase"} color="text.secondary">Variables de entorno</Typography>
+                                                            <input style={{display:'none'}} type="file" accept=".env" onChange={changeLoadEnv} ref={refInputEnv}/>
+                                                            <Button startIcon={<FileUploadIcon />} onClick={() => refInputEnv.current.click()}>Cargar .env</Button>
                         <Box>
                             <table>
                                 <tr>
