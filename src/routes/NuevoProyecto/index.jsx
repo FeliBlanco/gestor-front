@@ -1,4 +1,4 @@
-import { Backdrop, Box, Breadcrumbs, Button, Card, CircularProgress, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Backdrop, Box, Breadcrumbs, Button, Card, Checkbox, CircularProgress, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Menu from "../../components/Menu";
 import { styled } from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
@@ -129,7 +129,7 @@ export default function NuevoProyecto() {
 
     const addEnviromentVariable = () => {
         setData(i => {
-            i.enviroment_variables.push({key:'', value:''})
+            i.enviroment_variables.push({key:'', value:'', oculto:false})
             return {...i}
         })
     }
@@ -194,7 +194,7 @@ export default function NuevoProyecto() {
                 lines.forEach(line => {
                     if(line.trim() && !line.startsWith("#")) {
                         const [key, value] = line.split("=");
-                        envArray.push({ key: key.trim(), value: value ? value.trim() : "" });
+                        envArray.push({ key: key.trim(), value: value ? value.trim() : "", oculto: false });
                     }
                 });
                 if(envArray.length > 0) {
@@ -258,6 +258,7 @@ export default function NuevoProyecto() {
                                             <tr>
                                                 <td style={{flex:1}}><Typography fontSize="14px">Key</Typography></td>
                                                 <td style={{flex:1}}><Typography fontSize="14px">Value</Typography></td>
+                                                <td style={{flex:1}}><Typography fontSize="14px">Oculto</Typography></td>
                                                 <td></td>
                                             </tr>
                                             {
@@ -270,8 +271,14 @@ export default function NuevoProyecto() {
                                                             <td style={{flex:1}}>
                                                                 <TextField value={value.value} onChange={(e) => changeEnviromentVariableValue(index, e.target.value)} size="small" placeholder="RKDOiOINsloDShXCJIM7"/>
                                                             </td>
+                                                            <td style={{flex:1}}>
+                                                                <Checkbox checked={value.oculto} onChange={(e) => setData(i => {
+                                                                    i.enviroment_variables[index].oculto = e.target.checked  
+                                                                    return {...i}
+                                                                })}/>
+                                                            </td>
                                                             <td>
-                                                                <Button variant="outlined" sx={{borderColor:'#e1e1e1'}} onClick={() => deleteEnviromentVariable(index)}><RemoveIcon sx={{color:'#000'}}/></Button>
+                                                                <Button variant="outlined" sx={{borderColor:'#e1e1e1'}} onClick={() => deleteEnviromentVariable(index)}><RemoveIcon/></Button>
                                                             </td>
                                                         </tr>
                                                     )

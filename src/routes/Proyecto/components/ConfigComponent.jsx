@@ -1,4 +1,4 @@
-import { Backdrop, Box, Button, CircularProgress, Divider, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
+import { Backdrop, Box, Button, Checkbox, CircularProgress, Divider, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import AddIcon from '@mui/icons-material/Add';
@@ -170,6 +170,7 @@ export default function ConfigComponent({proyecto_id}) {
                                 <tr>
                                     <td style={{flex:1}}><Typography fontSize="14px">Key</Typography></td>
                                     <td style={{flex:1}}><Typography fontSize="14px">Value</Typography></td>
+                                    <td style={{flex:1}}><Typography fontSize="14px">Oculto</Typography></td>
                                     <td></td>
                                 </tr>
                                 {
@@ -181,6 +182,9 @@ export default function ConfigComponent({proyecto_id}) {
                                                 </td>
                                                 <td style={{flex:1}}>
                                                     <TextField value={value.value} onChange={(e) => changeEnviromentVariableValue(index, e.target.value)} size="small" placeholder="RKDOiOINsloDShXCJIM7"/>
+                                                </td>
+                                                <td style={{flex:1}}>
+                                                    <Checkbox checked={value.oculto} disabled />
                                                 </td>
                                                 <td>
                                                     <Button variant="outlined" sx={{borderColor:'#e1e1e1'}} onClick={() => deleteEnviromentVariable(index)}><RemoveIcon sx={{color:'text.primary'}}/></Button>
