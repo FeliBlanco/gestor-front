@@ -84,7 +84,7 @@ export default function ConfigComponent({proyecto_id}) {
 
     const addEnviromentVariable = () => {
         setConfig(i => {
-            i.env_vars.push({key:'', value:''})
+            i.env_vars.push({key:'', value:'', oculto: false, puede_cambiar:true})
             return {...i}
         })
     }
@@ -114,6 +114,12 @@ export default function ConfigComponent({proyecto_id}) {
     const changeEnviromentVariableValue = (index, value) => {
         setConfig(i => {
             i.env_vars[index].value = value;
+            return {...i}
+        })
+    }
+    const changeEnviromentVariableOculto = (index, value) => {
+        setConfig(i => {
+            i.env_vars[index].oculto = value;
             return {...i}
         })
     }
@@ -216,7 +222,7 @@ export default function ConfigComponent({proyecto_id}) {
                                                     <TextField value={value.value} onChange={(e) => changeEnviromentVariableValue(index, e.target.value)} size="small" placeholder="RKDOiOINsloDShXCJIM7"/>
                                                 </td>
                                                 <td style={{flex:1}}>
-                                                    <Checkbox checked={value.oculto} disabled />
+                                                    <Checkbox checked={value.oculto} disabled={!(value.puede_cambiar == true)} onChange={e => changeEnviromentVariableOculto(index, e.target.checked)}/>
                                                 </td>
                                                 <td>
                                                     <Button variant="outlined" sx={{borderColor:'#e1e1e1'}} onClick={() => deleteEnviromentVariable(index)}><RemoveIcon sx={{color:'text.primary'}}/></Button>
