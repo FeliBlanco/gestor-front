@@ -102,8 +102,8 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
         .catch(err => console.error("Error al copiar", err));
     }
     return (
-        <Box>
-            <Box sx={{display:'flex', gap:'10px', justifyContent:'flex-end'}}>
+        <Box sx={{ padding: '20px' }}>
+            <Box sx={{display:'flex', gap:'15px', justifyContent:'flex-end'}}>
                 <Button onClick={() => generarBuild()} sx={Boton} disableElevation variant="contained" startIcon={<BuildCircleIcon />} disabled={data?.actualizando == 1}>{data?.actualizando == 1 ? 'Building...' : 'Build'}</Button>
                 {console.log(data)}
                 {
@@ -116,9 +116,33 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
                 }
                 <Button onClick={() => abrirRepo()} sx={Boton} disableElevation variant="contained" startIcon={<GitHubIcon />}>Repository</Button>
             </Box>
-            <Card sx={{padding:'20px', margin:'20px 0'}}>
-                <Typography textTransform={"uppercase"} fontSize={"14px"} fontWeight={"bold"}>Build logs</Typography>
-                <Box sx={{border:'1px solid #e1e1e1', padding:'10px', maxHeight:'300px', overflowY:'auto'}} ref={scrollBuildLogRef}>
+            <Card sx={{
+                padding:'25px', 
+                margin:'25px 0',
+                transition: 'box-shadow 0.2s ease',
+                '&:hover': {
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                }
+            }}>
+                <Typography 
+                    textTransform={"uppercase"} 
+                    fontSize={"14px"} 
+                    fontWeight={"bold"}
+                    sx={{display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2}}
+                >
+                    <BuildCircleIcon sx={{fontSize: 20}} />
+                    Build logs
+                </Typography>
+                <Box sx={{
+                    border:'1px solid #e1e1e1',
+                    borderRadius: 1,
+                    padding:'15px',
+                    maxHeight:'300px',
+                    overflowY:'auto',
+                    fontFamily: 'monospace',
+                    fontSize: '13px',
+                    backgroundColor: '#fafafa'
+                }} ref={scrollBuildLogRef}>
                     {
                         getBuildLog.map((value, index) => {
                             return <Typography sx={{background: getBackgroundColorStatus(value.type), color: getColorStatus(value.type)}} key={`lo-${index}`}>{value.text}</Typography>
@@ -126,12 +150,53 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
                     }
                 </Box>
             </Card>
-            <Card sx={{padding:'20px', margin:'20px 0'}}>
-                <Box>
-                </Box>
-                <Box>
-                    <Typography sx={{fontSize:'15px'}} color="text.secondary">Domains</Typography>
-                    <Link sx={{fontWeight:'bold', fontSize:'15px', color:'text.primary', cursor:'pointer'}} onClick={() => window.open('https://'+data?.dominio)} underline="hover" color="inherit">https://{data?.dominio}</Link><ContentCopyIcon onClick={copiarDominio} sx={{fontSize:'14px', cursor:'pointer', marginLeft:'7px'}}/>
+            <Card sx={{
+                padding:'25px', 
+                margin:'25px 0',
+                transition: 'box-shadow 0.2s ease',
+                '&:hover': {
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                }
+            }}>
+                <Box sx={{marginBottom: 3}}>
+                    <Typography 
+                        sx={{fontSize:'15px', display: 'flex', alignItems: 'center', gap: 1}} 
+                        color="text.secondary"
+                    >
+                        <OpenInNewRoundedIcon sx={{fontSize: 20}} />
+                        Domains
+                    </Typography>
+                    <Box sx={{display: 'flex', alignItems: 'center', marginTop: 1}}>
+                        <Link 
+                            sx={{
+                                fontWeight:'bold', 
+                                fontSize:'15px', 
+                                color:'text.primary', 
+                                cursor:'pointer',
+                                transition: 'color 0.2s ease',
+                                '&:hover': {
+                                    color: '#1976d2'
+                                }
+                            }} 
+                            onClick={() => window.open('https://'+data?.dominio)} 
+                            underline="hover" 
+                            color="inherit"
+                        >
+                            https://{data?.dominio}
+                        </Link>
+                        <ContentCopyIcon 
+                            onClick={copiarDominio} 
+                            sx={{
+                                fontSize:'14px', 
+                                cursor:'pointer', 
+                                marginLeft:'7px',
+                                transition: 'color 0.2s ease',
+                                '&:hover': {
+                                    color: '#1976d2'
+                                }
+                            }}
+                        />
+                    </Box>
                 </Box>
                 {
                     data?.framework_tipo == "back" && 
@@ -174,10 +239,15 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
 }
 
 const Boton = {
-    padding:'10px 20px',
-    border:'1px solid #e1e1e1',
-    fontSize:'12px',
-    background:'#fff',
-    color:'#000',
-    textTransform:'capitalize'
+    padding: '10px 20px',
+    border: '1px solid #e1e1e1',
+    fontSize: '12px',
+    background: '#fff',
+    color: '#000',
+    textTransform: 'capitalize',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+        background: '#f5f5f5',
+        borderColor: '#999'
+    }
 }
