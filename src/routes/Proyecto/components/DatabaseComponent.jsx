@@ -11,7 +11,7 @@ export default function DatabaseComponent({proyecto_usuario, proyecto_id}) {
     const [getDBs, setDBs] = useState([])
     const [getCreateDBData, setCreateDBData] = useState(null)
 
-    const nuevo_usuario = proyecto_usuario.replaceAll('-', '_').replaceAll(' ', '') + '_'
+    const nuevo_usuario = proyecto_usuario ? proyecto_usuario.replaceAll('-', '_').replaceAll(' ', '') + '_' : ''
 
     useEffect(() => {
         loadDatabases();
@@ -72,6 +72,7 @@ export default function DatabaseComponent({proyecto_usuario, proyecto_id}) {
                             usuario={value.database_name}
                             password={value.database_password}
                             onDelete={onDeleteDatabase}
+                            onTest={() => window.location.href = `hola`}
                         />
                     ))}
                 </Box>

@@ -80,7 +80,7 @@ export default function DBCard({
                         onClick={onTest}
                         variant="outlined"
                     >
-                        Probar conexión
+                        Abrir
                     </Button>
                     <Box sx={{ display: 'flex', gap: 1 }}>
                         <Tooltip title="Editar">

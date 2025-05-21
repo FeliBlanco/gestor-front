@@ -13,15 +13,17 @@ export default function EmptyState({ onCreate }) {
             textAlign="center"
             sx={{
                 borderRadius: 2,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                background: 'linear-gradient(to bottom, #ffffff, #f8f9fa)'
+                boxShadow: theme => `0 4px 12px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'}`,
+                background: theme => theme.palette.mode === 'dark' 
+                    ? `linear-gradient(to bottom, ${theme.palette.background.paper}, ${theme.palette.background.default})`
+                    : 'linear-gradient(to bottom, #ffffff, #f8f9fa)'
             }}
         >
             <AddIcon color="action" sx={{ fontSize: 60, mb: 2 }} />
-            <Typography variant="h6" color="textSecondary">
+            <Typography variant="h6" color="text.primary">
                 No hay bases de datos creadas
             </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 Crea una nueva base de datos para comenzar a gestionar la información.
             </Typography>
             <Button

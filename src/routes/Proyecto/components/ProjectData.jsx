@@ -133,21 +133,31 @@ export default function ProjectData({proyecto, grupo, data, onChangeData}) {
                     <BuildCircleIcon sx={{fontSize: 20}} />
                     Build logs
                 </Typography>
-                <Box sx={{
-                    border:'1px solid #e1e1e1',
+                <Box sx={theme => ({
+                    border: `1px solid ${theme.palette.divider}`,
                     borderRadius: 1,
                     padding:'15px',
                     maxHeight:'300px',
                     overflowY:'auto',
                     fontFamily: 'monospace',
                     fontSize: '13px',
-                    backgroundColor: '#fafafa'
-                }} ref={scrollBuildLogRef}>
-                    {
-                        getBuildLog.map((value, index) => {
-                            return <Typography sx={{background: getBackgroundColorStatus(value.type), color: getColorStatus(value.type)}} key={`lo-${index}`}>{value.text}</Typography>
-                        })
-                    }
+                    backgroundColor: theme.palette.mode === 'dark' 
+                        ? theme.palette.background.paper 
+                        : '#fafafa'
+                })} ref={scrollBuildLogRef}>
+                    {getBuildLog.map((value, index) => (
+                        <Typography 
+                            key={`lo-${index}`}
+                            sx={theme => ({
+                                background: theme.palette.mode === 'dark' 
+                                    ? getBackgroundColorStatus(value.type) + '40'  // Adding transparency for dark mode
+                                    : getBackgroundColorStatus(value.type),
+                                color: getColorStatus(value.type)
+                            })}
+                        >
+                            {value.text}
+                        </Typography>
+                    ))}
                 </Box>
             </Card>
             <Card sx={{
